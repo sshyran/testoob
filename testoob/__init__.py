@@ -5,7 +5,6 @@ __author__ = "Ori Peleg"
 from main import *
 from running import *
 from extractors import *
-from misc import *
 
 ###############################################################################
 # examples
