@@ -1,0 +1,37 @@
+#!python
+
+import sys
+
+def printUsage():
+    print "Usage"
+    print "====="
+    print "  %s TestFileName" % sys.argv[0]
+    print 
+    print "example:"
+    print "  %s my_test_file.py - Runs the tests from the given file." % sys.argv[0]
+    sys.exit()
+
+def parseArgs():
+    try:
+        argument = sys.argv[1]
+        del sys.argv[1]
+        return argument
+    except IndexError, e:
+        printUsage()
+
+
+argument = parseArgs()
+if (argument == "-h" or argument == "--help"):
+    printUsage()
+
+try:
+    name = __name__
+    __name__ = "".join(argument.split("/")[-1].split(".")[0])
+    execfile(argument)
+    __name__ = name
+except IOError, e:
+    print e
+else:
+    import testoob
+    testoob.main()
+
