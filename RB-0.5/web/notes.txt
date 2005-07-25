@@ -1,0 +1,13 @@
+Python Syntax Highlighting:
+- http://silvercity.sourceforge.net/
+  - http://fauskes.net/nb/syntaxhighlighting/
+
+Other:
+- http://www.sagehill.net/docbookxsl
+- http://diveintoaccesibility.org
+
+Python API documentation:
+- epydoc
+- happydoc (config myself with CSS/XSLT?)
+- http://web.media.mit.edu/~vyzo/srcb
+
