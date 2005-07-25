@@ -1,0 +1,69 @@
+
+              ----========================----
+         -== TestOOB - Testing Out Of (The) Box ==-
+              ----========================----
+
+===========================================================
+= Description:
+===========================================================
+
+TestOOB is an advanced Python unit testing framework that
+integrates effortlessly with Python's standard 'unittest'
+module.
+
+It's designed and built to be easy to use and extend.
+
+===========================================================
+= Documentation:
+===========================================================
+
+See TestOOB's homepage:
+
+  http://testoob.sourceforge.net
+
+===========================================================
+= Features:
+===========================================================
+
+Start using immediately with the 'testoob' executable, or
+replace unittest.main() with testoob.main()
+
+Some advanced options:
+- Filtering              (see testoob/extractors.py)
+- Reporting              (see testoob/reporting.py)
+- Testing facilities     (see testoob/testing.py)
+- Running (e.g. threads) (see testoob/running.py)
+- And more!
+
+See the full running options by running 'testoob -h', and
+check the documentation.
+
+===========================================================
+= Installation:
+===========================================================
+
+See docs/INSTALL
+
+===========================================================
+= License:
+===========================================================
+
+TestOOB is distributed under the terms of the GNU Lesser
+General Public License (LGPL). See docs/COPYING and
+docs/lgpl.txt for more information.
+
+===========================================================
+= Credits:
+===========================================================
+
+TestOOB has been created with the help of:
+
+- Ori Peleg (orispammerpel at users.sourceforge.net)
+- Barak Schiller (bspamalotschiller at gmail.com)
+- Misha Seltzer (mishadontspamme at seltzer dot com)
+
+To mail us, remove spam-related words from the user names.
+
+Have fun testing!
+The TestOOB team.
+
