@@ -33,6 +33,7 @@ clean:
 $(APIDIR): $(SOURCES)
 	mkdir -p $(APIDIR)
 	epydoc -o $(APIDIR) --url http://testoob.sourceforge.net -n TestOOB -q $(SOURCES)
+	touch $(APIDIR)
 
 $(WEBSITEDIR): $(APIDIR) $(WEBSITE_SOURCES)
 	cd web && webgen && rm -fr $(WEBSITEDIR) && cp -R output $(WEBSITEDIR) && cp -R $(APIDIR) $(WEBSITEDIR) && chmod -R og+rX $(WEBSITEDIR)
