@@ -19,7 +19,6 @@
     </div>
 
     <div id="headerbar" class="bar">
-      <span class="left">Navbar: {navbar: }</span>
       <div style="clear:both"></div>
     </div>
 
