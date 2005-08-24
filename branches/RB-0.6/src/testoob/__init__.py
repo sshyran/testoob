@@ -13,7 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License. 
 
-"An alternative running scheme for unittest test suites"
+"""
+TestOOB - An advanced testing framework that works in concert with C{unittest}
+
+See http://testoob.sourceforge.net
+"""
 
 __author__ = 'Ori Peleg'
 __version__ = '0.6'

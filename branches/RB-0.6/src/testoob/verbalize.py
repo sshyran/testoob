@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License. 
 
+"""Verbose assertions support"""
+
 def _import(package_name, class_name):
     return getattr(__import__(package_name), class_name)
 
@@ -37,6 +39,15 @@ def _make_method_verbose(Class, method_name, reporter):
     setattr(Class, method_name, _new_func)
 
 def make_methods_verbose(module_name, class_name, methods_pattern, reporter):
+    """
+    Replace a class's methods with verbose wrappers
+
+    @param module_name: the module the class is in
+    @param class_name: the class's name
+    @param methods_pattern: methods matching this regular expression will be
+                            made verbose
+    @param reporter: the reporter to be used by the verbose wrappers
+    """
     Class = _import(module_name, class_name)
     from re import match
     for method_name in dir(Class):
