@@ -13,7 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License. 
 
-"XSL converters for XML output"
+"""
+XSL converters for XML output
+
+@var BASIC_CONVERTER: Converts to human-friendly HTML
+"""
 
 def _read_file(filename):
     from os.path import join, dirname

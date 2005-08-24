@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License. 
 
-"Reporting facilities"
+"Test result reporting"
 
 class IReporter:
     "Interface for reporters"
@@ -137,6 +137,14 @@ class TextStreamReporter(BaseReporter):
     separator2 = '-' * 70
     
     def __init__(self, stream, descriptions, verbosity, immediate = False):
+        """
+        @param stream: the stream to write to, a file-like object
+        @param descriptions: flag, should the tests' docstrings be printed
+                             instead of the test names?
+        @param verbosity: the verbosity level, one of 0, 1, 2
+        @param immediate: flag, should failures be reported immediately
+                          or at the end of the run?
+        """
         import re
         self.re = re
         BaseReporter.__init__(self)
@@ -456,11 +464,13 @@ class XMLReporter(BaseReporter):
         return "%.4f" % result
 
 class XMLFileReporter(XMLReporter):
+    """Write an XML report to a file"""
     def __init__(self, filename):
         XMLReporter.__init__(self)
         self.filename = filename
 
     def done(self):
+        "Create the XML file"
         XMLReporter.done(self)
 
         f = file(self.filename, "w")
@@ -468,7 +478,7 @@ class XMLFileReporter(XMLReporter):
         finally: f.close()
 
 class XSLTReporter(XMLReporter):
-    "This reporter uses an XSL transformation scheme to convert an XML output"
+    "Use an XSL transformation to convert XML output"
     def __init__(self, filename, converter):
         XMLReporter.__init__(self)
         self.filename = filename
@@ -488,27 +498,50 @@ class XSLTReporter(XMLReporter):
         open(self.filename, "wt").write(result)
 
 class HTMLReporter(XSLTReporter):
+    """
+    Create an HTML file with test run report.
+    """
     def __init__(self, filename):
+        """
+        @param filename: the name of the html file to create
+        """
         import xslconverters
         XSLTReporter.__init__(self, filename, xslconverters.BASIC_CONVERTER)
         
 ###############################################################################
 # Reporter proxy
 ###############################################################################
-def ObserverProxy(method_names):
+def observer_proxy(method_names, docstring=None):
     """
     Create a thread-safe proxy that forwards methods to a group of observers.
+
     See http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/413701.
+
+    @param method_names: the names of the methods to forward
+    @param docstring: the docstring prefix of the generated proxy
     """
     class Proxy:
+        """
+        Proxy generated with observer_proxy, http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/413701
+        """
         def __init__(self):
             self.observers = []
             import threading
             self.lock = threading.RLock()
         def add_observer(self, observer):
+            """
+            Add an observer.
+            Method calls to the proxy will be forwarded to the observer.
+            """
             self.observers.append(observer)
         def remove_observer(self, observer):
+            """
+            Remove an observer.
+            """
             self.observers.remove(observer)
+
+    if docstring is not None:
+        Proxy.__doc__ = docstring + "\n" + Proxy.__doc__
 
     def create_method_proxy(method_name):
         def method_proxy(self, *args, **kwargs):
@@ -518,6 +551,7 @@ def ObserverProxy(method_names):
                     getattr(observer, method_name)(*args, **kwargs)
             finally:
                 self.lock.release()
+        method_proxy.__doc__ = "Generated proxy for method name '%s'" % method_name
         return method_proxy
             
     for method_name in method_names:
@@ -525,7 +559,7 @@ def ObserverProxy(method_names):
 
     return Proxy
 
-ReporterProxy = ObserverProxy([
+ReporterProxy = observer_proxy([
     "start",
     "done",
     "startTest",
@@ -533,6 +567,4 @@ ReporterProxy = ObserverProxy([
     "addError",
     "addFailure",
     "addSuccess",
-])
-
-
+], docstring="A proxy for reporting test results")

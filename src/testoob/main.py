@@ -114,6 +114,19 @@ def _main(suite, defaultTest, options, test_names, require_modules):
     running.text_run(**kwargs)
 
 def main(suite=None, defaultTest=None):
+    """
+    main(suite=None, defaultTest=None)
+
+    Run the given suite, if given.
+
+    If no suite is given, defaultTest is used to generate a suite: defaultTest
+    is assumed to be the name of a callable object, which is called and
+    expected to return a test suite. This is the same as unittest's main's
+    defaultTest keyword argument.
+
+    If neither are given, the current module is scanned for TestCase
+    subclasses, and test suites are create from them and run.
+    """
     usage="""%prog [options] [test1 [test2 [...]]]
 
 examples:
