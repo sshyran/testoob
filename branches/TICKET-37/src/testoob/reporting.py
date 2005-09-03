@@ -62,6 +62,46 @@ class IReporter:
         "Get a nice printable description of the test"
         pass
 
+class ProcessedReporter:
+    def __init__(self, pipe):
+        self._pipe = pipe
+
+    def _sendData(self, name, *args):
+        from cPickle import dumps
+        from base64 import encodestring
+        # TODO: find pickle alternative.
+        str = name + (" %s" * len(args)) + "\n"
+        str %= tuple(map(lambda x: repr(encodestring(dumps(x)).strip()), args))
+        self._pipe.write(str)
+        self._pipe.flush()
+
+    def start(self):
+        self._sendData("start")
+
+    def done(self):
+        self._sendData("done")
+
+    def startTest(self, test):
+        self._sendData("startTest", test)
+
+    def stopTest(self, test):
+        self._sendData("stopTest", test)
+
+    def addError(self, test, err):
+        self._sendData("addError", test, err)
+
+    def addFailure(self, test, err):
+        self._sendData("addFailure", test, err)
+
+    def addSuccess(self, test):
+        self._sendData("addSuccess", test)
+
+    def addVassert(self, msg, state):
+        self._sendData("addVassert", msg, state)
+
+    def getDescription(self, test):
+        self._sendData("getDescription", test)
+
 # Constructing meaningful report strings from exception info
 
 def _exc_info_to_string(err, test):
