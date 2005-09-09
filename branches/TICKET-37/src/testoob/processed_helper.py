@@ -24,50 +24,21 @@ class ProcessedRunnerHelper:
         self._load_balance_idx = (self._load_balance_idx + 1) % len(self._fixturesList)
 
     def start(self, reporter):
-        from os import fork, pipe, fdopen
+        from os import fork, pipe, fdopen, waitpid
         from sys import exit
 
         children = []
 
         for processFixtures in self._fixturesList:
-            pipePair = [(fdopen(r, 'r'), fdopen(w, 'w')) for r, w in [pipe()]][0]
             pid = fork()
             if pid == 0:
-                pipePair[0].close()
-                pipeReporter = self._create_pipeReporter(pipePair[1])
-                self._run_fixtures(processFixtures, pipeReporter)
-                pipePair[1].close()
+                self._run_fixtures(processFixtures, reporter)
                 exit()
-            pipePair[1].close()
-            children.append({"pid": pid, "pipe": pipePair[0]})
+            children.append(pid)
 
-        self._listen(reporter, children)
+        for child in children:
+            waitpid(child, 0)
 
     def _run_fixtures(self, fixtures, reporter):
         [fixture(reporter) for fixture in fixtures]
-
-    def _create_pipeReporter(self, writePipe):
-        from reporting import ProcessedReporter
-        # TODO: better implemintation.
-        return ProcessedReporter(writePipe)
-
-    def _listen(self, reporter, children):
-        from base64 import decodestring
-        from cPickle import loads
-        from os import waitpid
-        from select import select
-        while children:
-            ready = select([child["pipe"] for child in children], [], [])[0]
-            for childsPipe in ready:
-                received = childsPipe.readline().split(" ")
-                if received == ['']:
-                    child = [child for child in children if child["pipe"] == childsPipe][0]
-                    waitpid(child["pid"], 0)
-                    children.remove(child)
-                    continue
-                received[1:] = map(lambda x: loads(decodestring(eval(x))), received[1:])
-                try:
-                    getattr(reporter, received[0])(*received[1:])
-                except Exception, e:
-                    pass # TODO: do something here...
 
