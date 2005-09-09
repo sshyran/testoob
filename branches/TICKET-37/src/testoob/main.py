@@ -114,9 +114,10 @@ def _main(suite, defaultTest, options, test_names, require_modules):
     if options.processes is not None:
         from running import ProcessedRunner
         from sys import platform
-        if kwargs["runDebug"]:
+        if kwargs.has_key("runDebug"):
             del kwargs["runDebug"]
-            print "WARNING: Processed running does not support --debug yet."
+            print " -- WARNING: Processed running does not support --debug yet."
+            print
         if platform == "win32":
             require_modules("--processes", "Posix operation system")
         kwargs["runner"] = ProcessedRunner(max_processes = options.processes)
