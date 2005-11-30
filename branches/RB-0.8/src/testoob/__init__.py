@@ -16,7 +16,7 @@
 "An alternative running scheme for unittest test suites"
 
 __author__ = 'Ori Peleg'
-__version__ = '__TESTOOB_VERSION__'
+__version__ = '0.8'
 
 from main import main
 import testing
