@@ -1,0 +1,20 @@
+---
+title: Home
+inMenu: true
+directoryName: TestOOB
+---
+
+h1. TestOOB: Advanced Testing in Python
+
+!images/screenshot02.png(Screenshot)!
+
+h2. News
+
+h3. 17 October, 2005: TestOOB 0.7 released
+
+* run tests in multiple processes!
+* repeat tests
+* filter tests with glob patterns
+* non-zero exit code on test failures
+* "Changelog":http://sourceforge.net/project/shownotes.php?release_id=364123
+

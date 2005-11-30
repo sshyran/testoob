@@ -1,0 +1,186 @@
+
+                           -== TestOOB Changelog ==-
+
+TestOOB is an advanced testing framework for Python. It is designed to
+integrate effortlessly with existing PyUnit (standard module 'unittest') test
+suites.
+
+== TestOOB 0.8, 30 November, 2005
+
+Many updates are introduced in this release.
+
+Release focus: stability, new features, and a mailing list
+
+Mailing list:
+   The TestOOB mailing list is the preferred way to ask questions, offer
+   assistance, and discuss TestOOB in general.
+
+   For more information, visit:
+
+       http://lists.sourceforge.net/lists/listinfo/testoob-user
+
+Enhancements:
+ * New '--list' option to lists tests, courtesy of Wolfram Kriesing
+ * New '--version' option
+ * New '--stop-on-fail' option to stop on the first failure or error
+ * New '--timeout' option to limit the maximum time a test can run
+ * New convenience functions for gathering tests from modules: testoob.collect and
+   testoob.collect_from_modules
+ * '--processes' option reimplemented with optimized distribution across
+   processes, and much better reporting. It uses Pyro for RPC. Reverts to the
+   old implementation if Pyro isn't available.
+   Visit Pyro at http://pyro.sourceforge.net
+ 
+Bugfixes:
+ * Fixed immediate reporting with multiple processes
+ * Fixed local imports on Windows
+ * _Many_ vassert (verbose assert) fixes, enhancements, and design improvements
+ * Various other fixes
+
+Internal:
+ * TestOOB tests extended and improved
+ * Extensive refactoring
+
+== TestOOB 0.7, 17 October, 2005
+
+Release Focus: Multi-process test running
+
+New Features:
+ * Run tests in multiple processes (--processes)
+ * Repeat tests (--repeat)
+ * Filter tests with glob patterns (--glob)
+
+Bugfixes:
+ * 'testoob' executable should exit with non-zero code on failure, ticket #149
+
+Internal:
+ * API for receiving the results of the test run, ticket #150
+ * Former test extractors are now decorators on an extractor
+ * Fixed some system tests
+ * Cleaned up docstrings
+
+== TestOOB 0.6, 23 August, 2005
+
+Release Focus: License Change, Bugfixes
+
+News:
+ * TestOOB is now licensed under the Apache License version 2.0
+ * ElementTree is no longer necessary for generating XML and HTML, the
+   necessary ElementTree sources have been included in the distribution
+
+Bugfixes:
+ * vassert failures with '%', ticket #117
+ * html_report.xsl missing from the distribution, ticket #123
+
+Internal:
+ * Better system tests, tickets #113, #114, #120, #121
+ * Documentation updates, tickets #18, #19, #102, #107, #109, #119, #122
+
+== TestOOB 0.5, 25 July, 2005
+
+Release Focus: threads, verbose asserts, and stability fixes
+
+New Features:
+ * Run tests in threads with '--threads=NUM', ticket #36
+ * Verbose asserts with '--vassert', ticket #16
+
+Bugfixes:
+ * 'testoob' executable receives its own options, ticket #95
+ * Python 2.2 compatibility fix, ticket #96
+ * testing.command_line works with Python 2.4, ticket #90
+ * Line-endings on windows for testing.command_line, ticket #94
+ * when using '--debug', load pdb on failures too, ticket #69
+ * better error messages for missing external modules, ticket #86
+
+Internal:
+ * Better system tests, tickets #99, #74
+ * Documentation updates
+
+== TestOOB 0.4, 2 July, 2005
+
+Release Focus: compatibility with older Python versions
+
+New Features:
+ * Now works with Python versions 2.2, 2.3 and 2.4, tickets #73 and #75
+ * Immediate feedback about failed tests with '--immediate'
+ * Special support for testing command-line applications with
+   testoob.testing.command_line, ticket #38
+
+Bugfixes:
+ * The 'testoob' executable now correctly imports modules in the test suite's
+   directory, ticket #85
+
+Internal:
+ * TestOOB's own tests converted to unittest/TestOOB, ticket #72
+ * More self-testing scenarios, ticket #45
+ * New website based on webgen (http://webgen.rubyforge.org)
+
+== TestOOB 0.3, 12 June, 2005
+
+New committer: Misha Seltzer
+
+New Features:
+ * New 'testoob' executable, run tests with no changes at all!
+   (changeset:103, ticket:65)
+ * '--debug' command line option - run pdb post-mortem on test errors!
+   (changeset:101, ticket:60)
+ * Printed test names are now copy-paste friendly (changeset:99, ticket:59)
+ * '--interval' command line option - define a sleep interval between tests
+   (changeset:98, ticket:20)
+ * Improved color output when using '--color' (changeset:97, ticket:63)
+
+Bugfixes:
+ NONE
+
+Internal:
+ * Added logistics/generate_release.py
+ * API documentation is included in the distribution via epydoc
+
+== TestOOB 0.2, 4 June, 2005
+
+Release Focus: Better reporting
+
+Dedicated to Barak Schiller, who is leaving for South
+America. Have fun!
+
+Features:
+ * Color output with ANSI codes [barak, orip]
+   (changeset:64 + changeset:68, ticket:14)
+ * XML output additions: [barak]
+   - Total time element to XML output
+     (incomplete, changeset:69, ticket:46)
+   - Failure message and type (changeset:70, ticket:47)
+ * HTML output [barak]
+   - Converting XML with XSLT, requires 4Suite, '--html'
+     cmdline option (changeset:74)
+   - Direct HTML output (OldHTMLReporter) (changeset:71)
+
+Bugfixes:
+ NONE
+
+API Changes:
+ * Refactored running interface [orip] (changeset:66)
+
+Internal:
+ NONE
+
+== TestOOB 0.1, 20 May, 2005
+
+Release Focus: A drop-in enhancement to unittest.main()
+
+Features:
+ * Reproducing unittest.main()'s features [orip]
+   (ticket:1, ticket:2, ticket:3, ticket:4, changeset:19,
+   changeset:21)
+ * XML reporting, requires ElementTree [orip]
+   (ticket:5, changeset:41)
+
+Bugfixes:
+ NONE
+
+API Changes:
+ * Results are proxies through an ObservableProxy [orip]
+   (ticket:40, changeset:30)
+
+Internal:
+ * Self-validating tests for TestOOB itself [orip]
