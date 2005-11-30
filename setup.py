@@ -21,6 +21,10 @@ TestOOB - Python Testing Out Of (The) Box
 
 TestOOB is an advanced unit testing framework for Python. It integrates
 effortlessly with existing PyUnit (module "unittest") test suites.
+
+This release adds the '--list', '--stop-on-fail', and '--timeout'
+options, optimized multi-process support, enhanced verbose asserts,
+and many bugfixes.
 """.strip()
 
 kwargs['classifiers'] = """
