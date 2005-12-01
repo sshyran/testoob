@@ -5,7 +5,7 @@ kwargs = {
 
     # meta-data
     'name'             : 'testoob',
-    'version'          : '__TESTOOB_VERSION__',
+    'version'          : '0.8.1',
     'author'           : 'Ori Peleg',
     'author_email'     : 'testoob@gmail.com',
     'url'              : 'http://testoob.sourceforge.net',
@@ -21,6 +21,10 @@ TestOOB - Python Testing Out Of (The) Box
 
 TestOOB is an advanced unit testing framework for Python. It integrates
 effortlessly with existing PyUnit (module "unittest") test suites.
+
+This release adds the '--list', '--stop-on-fail', and '--timeout'
+options, optimized multi-process support, enhanced verbose asserts,
+and many bugfixes.
 """.strip()
 
 kwargs['classifiers'] = """
