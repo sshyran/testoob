@@ -5,7 +5,7 @@ kwargs = {
 
     # meta-data
     'name'             : 'testoob',
-    'version'          : '0.8',
+    'version'          : '0.8.1',
     'author'           : 'Ori Peleg',
     'author_email'     : 'testoob@gmail.com',
     'url'              : 'http://testoob.sourceforge.net',
