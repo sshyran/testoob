@@ -1,0 +1,13 @@
+---
+title: Support
+inMenu: true
+directoryName: TestOOB
+---
+
+h2. Submit a Ticket
+
+* "Request a feature":https://opensvn.csie.org/traccgi/testoob/trac.cgi/newticket?component=feature_requests
+* "Report a bug":https://opensvn.csie.org/traccgi/testoob/trac.cgi/newticket?component=bugs
+
+If you also enter your email address we will be able to get back to you if we
+have questions.
