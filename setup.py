@@ -12,15 +12,22 @@ kwargs = {
     'download_url'     : 'http://sourceforge.net/project/showfiles.php?group_id=138557',
     'license'          : 'Apache License, Version 2.0',
     'platforms'        : ['any'],
-    'description'      : 'TestOOB - An advanced unit testing framework',
+    'description'      : 'testoob - an advanced testing framework',
 }
 
 
 kwargs['long_description'] = """
-TestOOB - Python Testing Out Of (The) Box
+testoob - Python Testing Out Of (The) Box
 
-TestOOB is an advanced unit testing framework for Python. It integrates
-effortlessly with existing PyUnit (module "unittest") test suites.
+'testoob' is an advanced testing framework for Python that is fully
+compatible with existing PyUnit test suites.
+
+Version 0.9 fixes some bugs and adds code coverage support, timed-repeat
+of tests, improved testing of command-line applications, and several
+more features.
+
+A full list of changes is available at:
+http://sourceforge.net/project/shownotes.php?release_id=402463&group_id=138557
 """.strip()
 
 kwargs['classifiers'] = """
