@@ -6,7 +6,7 @@ WEBSITEDIR = $(HOME)/public_html/testoob
 SUITEFILE = tests/alltests.py
 SOURCES = $(wildcard src/testoob/*.py)
 WEBSITE_SOURCES = web/src/*.page web/src/*.template web/src/*.info
-VERSION = __TESTOOB_VERSION__
+VERSION = 0.9
 WEBDISTFILE = $(DISTDIR)/testoob_website-$(VERSION).tar.bz2
 
 .PHONY: all
