@@ -19,8 +19,14 @@ kwargs = {
 kwargs['long_description'] = """
 Testoob - Python Testing Out Of (The) Box
 
-Testoob is an advanced unit testing framework for Python. It integrates
-effortlessly with existing PyUnit (module "unittest") test suites.
+Testoob is an advanced testing framework for Python that is
+fully compatible with PyUnit test suites.
+
+Version 1.0 adds skipping support, automatic color detection,
+PDF reports, and much more, along with several bugfixes.
+
+The full list of changes is at:
+http://sourceforge.net/project/shownotes.php?release_id=413330&group_id=138557
 """.strip()
 
 kwargs['classifiers'] = """
