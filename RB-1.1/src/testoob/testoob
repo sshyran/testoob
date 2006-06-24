@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+import sys
+
+def parseArgs(printUsage=False):
+    if printUsage:
+        sys.argv.append("-h")
+
+    parser = testoob_main("_arg_parser")()
+    options, free_args = parser.parse_args()
+
+    if len(free_args) == 0:
+        parser.error("No filename specified")
+    file_name = free_args[0]
+    test_names = free_args[1:]
+
+    return options, file_name, test_names, parser
+
+def addPythonPath(path):
+    from os.path import normpath
+    sys.path.insert(0, normpath(path))
+
+def currentFile():
+    try:
+        return __file__
+    except NameError:
+        # Python 2.2 compatibility
+        return sys.argv[0]
+
+def fixIncludePath():
+    # the testoob executable is often in the same directory as testoob
+    from os.path import dirname, join
+    module_path = join(dirname(currentFile()), "..")
+    addPythonPath(module_path)
+
+def testoob_main(attrname):
+    try:
+        exec "from testoob.main import %(attrname)s as result" % vars()
+    except ImportError:
+        fixIncludePath()
+        exec "from testoob.main import %(attrname)s as result" % vars()
+        
+    return result
+
+options, file_name, test_names, parser = parseArgs()
+
+# Add the path of the ran file to the python path, so that includes
+# from the same directory would work.
+from os.path import dirname, basename
+addPythonPath(dirname(file_name))
+
+# run the file given on the command line
+name = __name__
+__name__ = basename(file_name).split(".")[0]
+execfile(file_name)
+__name__ = name
+
+try:
+    sys.exit(not testoob_main("_main")(None, None, options, test_names, parser))
+except testoob_main("ArgumentsError"), e:
+    parser.error(str(e))
