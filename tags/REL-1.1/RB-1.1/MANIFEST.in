@@ -1,0 +1,9 @@
+include README
+include MANIFEST.in
+
+include docs/CHANGELOG
+include docs/COPYING
+include docs/INSTALL
+include docs/LICENSE-2.0.txt
+
+recursive-include tests *.py
