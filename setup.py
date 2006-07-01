@@ -5,7 +5,7 @@ kwargs = {
 
     # meta-data
     'name'             : 'testoob',
-    'version'          : '1.1',
+    'version'          : '1.11',
     'author'           : 'Ori Peleg',
     'author_email'     : 'testoob@gmail.com',
     'url'              : 'http://testoob.sourceforge.net',
@@ -23,16 +23,7 @@ Testoob is an advanced unit testing framework for Python. It
 integrates effortlessly with existing PyUnit (module "unittest") test
 suites.
 
-Many bugs have been fixed in this release, and performance has been
-improved.
-
-New features include profiling support, a convenient summary of failed
-tests, enhanced assertion of exceptions, graceful handling of Ctrl-C,
-silent running, a simple GUI progress report, and enhanced skipping
-support when testing command-line applications.
-
-The changelog is available at:
-http://sourceforge.net/project/shownotes.php?release_id=427357&group_id=138557
+Bugfix release, some options wouldn't run.
 """.strip()
 
 kwargs['classifiers'] = """
