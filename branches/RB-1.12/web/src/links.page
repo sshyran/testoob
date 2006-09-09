@@ -1,0 +1,17 @@
+---
+title: Links
+inMenu: true
+directoryName: Testoob
+---
+
+h2. Unit Testing Tutorials
+
+"Dive Into Python":http://diveintopython.org has excellent tutorials:
+* "Unit Testing":http://diveintopython.org/unit_testing/index.html
+* "Test-First Programming":http://diveintopython.org/unit_testing/stage_1.html
+
+h2. Relevant Links
+
+* "PyUnit":http://pyunit.sourceforge.net, the standard Python unit testing framework which Testoob works with
+* "doctest":http://docs.python.org/lib/module-doctest.html, the standard Python module for literate testing
+* "py.test":http://codespeak.net/py/current/doc/test.html, an alternative testing framework
