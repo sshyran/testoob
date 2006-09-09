@@ -3,8 +3,6 @@
 import re, sys, os, warnings
 import pysvn
 
-first_working_directory = os.getcwd()
-
 def _log(s):
     print >>sys.stderr, "* " + str(s)
 
@@ -114,9 +112,7 @@ def norm_join(*args):
 
 def root_dir():
     "the project's root dir"
-    if os.path.isabs( options().root_dir ):
-        return options().root_dir
-    return norm_join( first_working_directory, options().root_dir )
+    return options().root_dir
 
 def get_command_output(cmd):
     import commands
@@ -264,14 +260,14 @@ def create_distribution():
     dir = tempfile.mkdtemp(suffix=".generate_release")
     original_dir = os.getcwd()
     try:
-        log_call(os.chdir, dir)
+        os.chdir(dir)
         svnclient().checkout( release_branch_url(), branch_name() )
-        log_call(os.chdir, branch_name())
+        os.chdir(branch_name())
         run_command("make distfiles")
         run_command("mkdir -p %s" % release_dir())
         run_command("cp dist/* %s" % release_dir())
     finally:
-        log_call(os.chdir, original_dir)
+        os.chdir(original_dir)
         run_command("rm -fr %s" % dir)
 
 def upload_to_sourceforge():
