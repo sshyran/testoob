@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+import sys
+
+def parseArgs(printUsage=False):
+    if printUsage:
+        sys.argv.append("-h")
+
+    parser, options, free_args = testoob_main("_parse_args")()
+
+    if len(free_args) == 0:
+        parser.error("No filename specified")
+    file_name = free_args[0]
+    test_names = free_args[1:]
+
+    return options, file_name, test_names, parser
+
+def addPythonPath(path):
+    from os.path import normpath
+    sys.path.insert(0, normpath(path))
+
+def testoob_main(attrname):
+    exec "from testoob.main import %(attrname)s as result" % vars()
+    return result
+
+options, file_name, test_names, parser = parseArgs()
+
+# Add the path of the ran file to the python path, so that includes
+# from the same directory would work.
+from os.path import dirname, basename
+addPythonPath(dirname(file_name))
+
+# run the file given on the command line
+name = __name__
+__name__ = basename(file_name).split(".")[0]
+execfile(file_name)
+__name__ = name
+
+try:
+    sys.exit(not testoob_main("_main")(None, None, options, test_names, parser))
+except testoob_main("ArgumentsError"), e:
+    parser.error(str(e))
