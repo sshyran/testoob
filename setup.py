@@ -24,6 +24,13 @@ Testoob - Python Testing Out Of (The) Box
 
 Testoob is an advanced unit testing framework for Python. It integrates
 effortlessly with existing PyUnit (module "unittest") test suites.
+
+Version 1.13 adds support for Python 2.5, rerunning tests on
+failure, enhanced verbose asserts, and a few bugfixes and
+internal improvements.
+
+The full list of changes is at:
+http://sourceforge.net/project/shownotes.php?group_id=138557&release_id=468351
 """.strip()
 
 kwargs['classifiers'] = """
