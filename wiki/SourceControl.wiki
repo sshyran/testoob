@@ -1,0 +1,36 @@
+#summary Working with Testoob's source control.
+
+= Bazaar =
+Testoob is being developed with Bazaar, hosted on launchpad: http://launchpad.net/testoob
+
+= Subversion mirror =
+We maintain a read-only subversion mirror on the Google Code svn server: http://testoob.googlecode.com/svn/trunk
+
+= Installing Bazaar =
+Install from [https://launchpad.net/bzr/+download here] or use your system's package management system
+
+= Getting the source =
+To get Testoob's latest trunk:
+{{{
+bzr branch lp:testoob
+}}}
+
+To update your local branch:
+{{{
+bzr pull
+}}}
+
+= Contributing =
+If you're part of the Testoob team:
+ * Push to a private branch: see the [https://help.launchpad.net/Code/UploadingABranch Launchpad docs]
+ * Push to trunk:
+{{{
+bzr push lp:testoob
+}}}
+
+Bazaar makes it easy to contribute regardless of "commit access". Your name stays on the commits.
+ * You can push to a [https://help.launchpad.net/Code/PersonalBranches personal branch] on Launchpad and let us know (we can pull the changes from there)
+ * You can create a [http://bazaar-vcs.org/BzrGivingBack bundle] file and send it:
+{{{
+bzr bundle -o bundle.patch
+}}}
