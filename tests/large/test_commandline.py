@@ -1,24 +1,12 @@
 import unittest, testoob, os, sys, tempfile
 import helpers
 import testoob.testing # for skip()
-import testoob.run_cmd
 
 _suite_file = os.path.abspath(helpers.project_subpath("tests/suites.py"))
 
 def _safe_unlink(filename):
     if os.path.exists(filename):
         os.unlink(filename)
-
-def _echo_args(string):
-    """cross-platform args for echoing a string"""
-    if sys.platform.startswith("win"):
-        return ["cmd", "/c", "echo", string]
-    else:
-        return ["echo", string]
-
-def _unsupported_on_windows():
-    if sys.platform.startswith("win"):
-        testoob.testing.skip(reason="Unsuported on Windows")
 
 def current_directory():
     from os.path import dirname, abspath, normpath
@@ -40,7 +28,7 @@ def _grep(pattern, string):
         ])
 
 def _run_testoob(args, grep=None):
-    stdout, stderr, rc = testoob.run_cmd.run_command(args)
+    stdout, stderr, rc = testoob.testing._run_command(args)
     if grep is not None:
         return _grep(grep, stderr)
     return stderr
@@ -123,18 +111,37 @@ testJ \(.*suites\.CaseLetters\.testJ\) \.\.\. OK
 
     def testVassertSimple(self):
         args = _testoob_args(options=["--regex=CaseDigits.test0", "--vassert"])
-        regex = r"""\[ PASSED \(assertEquals\) first: "00" second: "00" \]"""
+        regex = r"""
+test0 \(suites\.CaseDigits\.test0\) \.\.\. OK
+  \[ PASSED \(assertEquals\) first: "00" second: "00" \]
+
+----------------------------------------------------------------------
+""".strip()
         testoob.testing.command_line(args=args, expected_error_regex=regex)
 
     def testVassertFormatStrings(self):
         args = _testoob_args(options=["--regex=MoreTests.test.*FormatString",
                                      "--vassert"])
-        regex = r"""\[ PASSED \(assertEquals\) first: "%s" second: "%s" \]"""
+        regex = r"""
+test.*FormatString \(suites\.MoreTests\.test.*FormatString\) \.\.\. OK
+  \[ PASSED \(assertEquals\) first: "%s" second: "%s" \]
+
+----------------------------------------------------------------------
+""".strip()
         testoob.testing.command_line(args=args, expected_error_regex=regex)
 
     def testVassertTestoobTesting(self):
         args = _testoob_args(options=["--vassert", "CaseTestoobAsserts"])
-        regex = r"""\[ PASSED \(assert_matches\) actual: "The word Blah is written WITH h" msg: "Checking spelling" \].*\[ PASSED \(assert_true\) msg: "Checking if 'True' is true" \]"""
+        regex = r"""
+test_assert_matchs \(suites\.CaseTestoobAsserts\.test_assert_matchs\) \.\.\. OK
+  \[ PASSED \(assert_matches\) actual: "The word Blah is written WITH h" msg: "Checking spelling" \]
+test_assert_ture \(suites\.CaseTestoobAsserts\.test_assert_ture\) \.\.\. OK
+  \[ PASSED \(assert_true\) msg: "Checking if 'True' is true" \]
+
+----------------------------------------------------------------------
+Ran 2 tests in \d\.\d+s
+OK
+""".strip()
         testoob.testing.command_line(args=args, expected_error_regex=regex)
 
     def testImmediateReporting(self):
@@ -207,18 +214,12 @@ testJ \(.*suites\.CaseLetters\.testJ\) \.\.\. OK
             _safe_unlink(output_file)
 
     def testXMLReporting(self):
-        # silly try/except chaining to find an available version of ElementTree
-        try: import elementtree.ElementTree as ET
+        try:
+            from elementtree import ElementTree
         except ImportError:
-            try: import cElementTree as ET
-            except ImportError:
-                try: import lxml.etree as ET
-                except ImportError:
-                    try: import xml.etree.ElementTree as ET # Python 2.5
-                    except ImportError:
-                        testoob.testing.skip(reason="Needs ElementTree")
+            testoob.testing.skip(reason="Needs ElementTree")
 
-        root = ET.XML( self._get_file_report("xml") )
+        root = ElementTree.XML( self._get_file_report("xml") )
 
         # testsuites tag
         self.assertEqual("results", root.tag)
@@ -382,7 +383,8 @@ AssertionError: Timeout.*
 """.strip()
     def testTimeOut(self):
         regex = self._timeout_regex_base + "Ran 2 tests in 2\.\d+s"
-        _unsupported_on_windows()
+        if sys.platform.startswith("win"):
+            testoob.testing.skip(reason="Unsuported on Windows")
         args = _testoob_args(options=["--timeout=1"], tests=["CaseSlow"])
         testoob.testing.command_line(args=args, expected_error_regex=regex, expected_rc=1)
 
@@ -432,20 +434,15 @@ FAILED \(failures=1, errors=1\)
         )
 
     def testProcessesOldImmediate(self):
-        _unsupported_on_windows()
         self._check_processes_immediate("_old")
 
     def testProcessesPyroImmediate(self):
-        testoob.testing.skip("Usually hangs")
-        _unsupported_on_windows()
         self._check_processes_immediate("_pyro")
 
     def testProcessesDefaultImmediate(self):
-        _unsupported_on_windows()
         self._check_processes_immediate("")
 
     def testSkipWithProcesses(self):
-        _unsupported_on_windows()
         testoob.testing.command_line(
                 _testoob_args(tests=["Skipping"], options=["--processes_pyro=2"]),
                 expected_error_regex="Skipped 2 tests",
@@ -630,10 +627,18 @@ FAILED \(failures=1, errors=1\)
                 expected_rc=0,
         )
 
-    def testSpecifyingSuitesMoreThanOnce(self):
+    def testMultipleSameSuite(self):
         tests = ["CaseDigits", "CaseLetters"]
-        testoob.testing.command_line(_testoob_args(tests), expected_error_regex="Ran 36 tests")
-        testoob.testing.command_line(_testoob_args(tests*2), expected_error_regex="Ran 36 tests")
+        stdout, stderr, rc = testoob.testing._run_command(_testoob_args(tests=tests))
+        import re
+        stderr = re.escape(stderr)
+        stderr = re.sub("\d\\\.\d\d\ds", r"\d.\d\d\ds", stderr)
+        testoob.testing.command_line(
+                _testoob_args(tests=tests*2),
+                expected_error_regex=stderr,
+                expected_output=stdout,
+                expected_rc=rc,
+        )
 
     def testSkipOnInterrupt(self):
         testoob.testing.command_line(
@@ -735,7 +740,7 @@ FAILED \(failures=1, errors=1\)
         testoob.testing.assert_raises(
             testoob.SkipTestException,
 
-            testoob.testing.command_line, _echo_args("look into a glass onion"),
+            testoob.testing.command_line, ["echo", "look into a glass onion"],
             skip_check=check,
 
             expected_regex = 'No onion support yet',
@@ -743,7 +748,7 @@ FAILED \(failures=1, errors=1\)
 
     def testCommandLineSkipCheckNotSkipping(self):
         try:
-            testoob.testing.command_line( _echo_args("abc"), skip_check=lambda *args:None )
+            testoob.testing.command_line( ["echo", "abc"], skip_check=lambda *args:None )
         except testoob.SkipTestException:
             self.fail("Got unexpected SkipTestException")
 
@@ -775,37 +780,6 @@ FAILED \(failures=1, errors=1\)
         testoob.testing.command_line(
             args = _testoob_args(options=["--version"]),
             expected_output_regex = 'Testoob ' + testoob.__version__,
-        )
-
-    def testTimeEachTestSuccess(self):
-        testoob.testing.command_line(
-            args = _testoob_args(
-                options=["-v", "--time-each-test"], tests=["CaseDigits"]
-            ),
-            expected_rc = 0,
-            expected_error_regex = ".*".join(['OK \[[0-9.]+ seconds\]']*10)
-        )
-
-    def testTimeEachTestMixed(self):
-        testoob.testing.command_line(
-            args = _testoob_args(
-                options=["-v", "--time-each-test"], tests=["CaseMixed"]
-            ),
-            rc_predicate = lambda rc: rc != 0,
-            expected_error_regex = ".*".join([
-                    'ERROR \[[0-9.]+ seconds\]',
-                    'FAIL \[[0-9.]+ seconds\]',
-                    'OK \[[0-9.]+ seconds\]',
-                ])
-        )
-
-    def testTimeEachTestNoVerbose(self):
-        testoob.testing.command_line(
-            args = _testoob_args(
-                options=["--time-each-test"], tests=["CaseDigits"]
-            ),
-            expected_rc = 0,
-            expected_error_regex = '\.\s*\[[0-9.]+ seconds\]' * 10
         )
 
 if __name__ == "__main__":

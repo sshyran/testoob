@@ -22,8 +22,6 @@ try:
 except ImportError:
     from compatibility.itertools import ifilter as _ifilter
 
-from os.path import dirname, normpath
-
 def _is_test_case(x):
     import types, unittest
     try:
@@ -76,21 +74,14 @@ def collector_from_modules(modules, globals_dict):
         return result
     return suite
 
-def _frame_filename(frame):
-    if '__file__' in frame.f_globals:
-        return frame.f_globals["__file__"]
-
-    # backwards compatability
-    return frame.f_code.co_filename
-
 def _first_external_frame():
     import sys
 
-    current_file = _frame_filename( sys._getframe() )
+    current_file = sys._getframe().f_code.co_filename
 
     # find the first frame with a filename different than this one
     frame = sys._getframe()
-    while _frame_filename(frame) == current_file:
+    while frame.f_code.co_filename == current_file:
         frame = frame.f_back
 
     return frame
@@ -99,6 +90,7 @@ def _calling_module_name():
     return _first_external_frame().f_globals["__name__"]
 
 def _calling_module_directory():
+    from os.path import dirname, normpath
     return normpath(dirname(_first_external_frame().f_code.co_filename))
 
 def _module_names(glob_pattern, modulename, path):
@@ -117,30 +109,17 @@ def _load_suite(module_name):
         warnings.warn("No tests loaded for module '%s'" % module_name)
     return result
 
-def collect_from_files(glob_pattern, name=None, modulename=None, path=None, file=None):
-    if name is not None and modulename is not None:
-        raise ValueError("conflicting arguments 'name' and 'modulename' can't be specified together")
-
-    if modulename is not None:
-        warnings.warn("'modulename' parameter name is deprecated, use 'name' instead")
-        name = modulename
-
-    if name is None:
-        name = _calling_module_name()
-
-    if path is not None and file is not None:
-        raise ValueError("conflicting arguments 'path' and 'file' can't be specified together")
+def collect_from_files(glob_pattern, modulename=None, path=None):
+    if modulename is None:
+        modulename = _calling_module_name()
 
     if path is None:
-        if file is None:
-            path = _calling_module_directory()
-        else:
-            path = dirname(file)
+        path = _calling_module_directory()
 
     # mimicking unittest.TestLoader.loadTestsFromNames, but with more checks
     suites = [
         _load_suite(name)
-        for name in _module_names(glob_pattern, name, path)
+        for name in _module_names(glob_pattern, modulename, path)
     ]
 
     import unittest

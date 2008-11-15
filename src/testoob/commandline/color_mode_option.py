@@ -1,4 +1,4 @@
-import parsing, sys
+import parsing
 
 color_choices = ["never", "always", "auto"]
 parsing.parser.add_option(
@@ -11,27 +11,10 @@ parsing.parser.add_option(
 )
 
 def auto_color_support(stream):
-    if sys.platform.startswith("win"):
-        try:
-            import ctypes
-            return _win_ctypes_color_support()
-        except ImportError:
-            pass
-
-        # 'True' by default
+    import sys
+    if sys.platform == "win32":
         return True
 
-    return _curses_color_support(stream)
-
-def _win_ctypes_color_support():
-    import ctypes
-    STD_OUTPUT_HANDLE = -11
-    out_handle = ctypes.windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
-    csbi = ctypes.create_string_buffer(22)
-    res = ctypes.windll.kernel32.GetConsoleScreenBufferInfo(out_handle, csbi)
-    return res != 0
-
-def _curses_color_support(stream):
     if not hasattr(stream, "isatty"):
         return False
     if not stream.isatty():
@@ -50,6 +33,7 @@ def process_options(options):
         if options.color_mode == "always":
             return True
         # TODO: currently hard-coded to sys.stderr, fix this
+        import sys
         if options.color_mode == "auto" and auto_color_support(sys.stderr):
             return True
         return False

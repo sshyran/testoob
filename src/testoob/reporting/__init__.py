@@ -22,4 +22,3 @@ from xml import XMLFileReporter
 from reporter_proxy import ReporterProxy
 from test_info import TestInfo
 from pdf import PdfReporter
-import options

@@ -20,5 +20,3 @@ def load_options():
         exec "import %s" % module
 
 load_options()
-
-import parsing

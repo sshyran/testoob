@@ -47,20 +47,16 @@ class TextStreamReporter(BaseReporter):
     separator1 = '=' * 70
     separator2 = '-' * 70
 
-    def __init__(self, stream, create_writers = StreamWriters):
-        # TODO - why the hell do we save re?
+    def __init__(self, stream, descriptions, verbosity, immediate = False, create_writers = StreamWriters):
         import re
         self.re = re
         BaseReporter.__init__(self)
         self.writers = create_writers(stream)
-
-        from testoob.reporting import options
-        self.showAll = options.verbosity > 1
-        self.dots = options.verbosity == 1
-        self.vassert = options.verbosity == 3
-        self.immediate = options.immediate
-        self.descriptions = options.descriptions
-        self.time_each_test = options.time_each_test
+        self.showAll = verbosity > 1
+        self.dots = verbosity == 1
+        self.vassert = verbosity == 3
+        self.immediate = immediate
+        self.descriptions = descriptions
 
     def startTest(self, test_info):
         BaseReporter.startTest(self, test_info)
@@ -72,7 +68,7 @@ class TextStreamReporter(BaseReporter):
     def _report_result(self, long_string, short_string, writer):
         if self.showAll:
             writer.write("\n" * self.multiLineOutput)
-            writer.write(long_string)
+            writer.writeln(long_string)
         elif self.dots:
             writer.write(short_string)
 
@@ -81,11 +77,8 @@ class TextStreamReporter(BaseReporter):
         self._report_result("OK", ".", self.writers.success)
 
     def addSkip(self, test_info, err_info, isRegistered=True):
-        # TODO: why does addSkip get called _after_ stopTest?
         BaseReporter.addSkip(self, test_info, err_info, isRegistered)
-        # newline needed because newline added in stopTest gets printed before
-        # SKIPPED does
-        self._report_result("SKIPPED\n", "S", self.writers.warning)
+        self._report_result("SKIPPED", "S", self.writers.warning)
 
     def _report_failure(self, long_string, short_string, writer, test_info, err_info):
         self._report_result(long_string, short_string, writer)
@@ -107,13 +100,6 @@ class TextStreamReporter(BaseReporter):
         BaseReporter.stopTest(self, test_info)
         if self.vassert and not self.immediate:
             self._printVasserts(test_info)
-        if self.time_each_test:
-            self.writers.normal.write(
-                " [%.2f seconds]" % self.current_test_total_time
-            )
-
-        if self.showAll:
-            self._writeln("")
 
     def _vassertMessage(self, assertName, varList):
         msg = "(" + assertName + ") "

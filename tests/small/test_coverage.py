@@ -8,8 +8,6 @@ from unittest import TestCase
 
 import coverage_sample_module as sample
 
-import testoob
-
 class SimpleStub:
     def __getattr__(self, name):
         setattr(self, name, SimpleStub())
@@ -77,8 +75,6 @@ class system_tests(CoverageTest):
     "Large-grain tests for Coverage"
 
     def test_percentage_full(self):
-        if not testoob.capabilities.c.settrace:
-            testoob.testing.skip("requires sys.settrace")
         self.coverage.runfunc(sample.foo, 5)
         self.assertEqual( 100, self.coverage.total_coverage_percentage() )
 

@@ -168,7 +168,8 @@ class CaseDifferentTestNameSignatures(unittest.TestCase):
 
 def _interrupt_self():
     # simulate Ctrl-C being pressed
-    raise KeyboardInterrupt()
+    import os, signal
+    os.kill(os.getpid(), signal.SIGINT)
 
 class InterruptingTests(unittest.TestCase):
     def test_a(self): pass
