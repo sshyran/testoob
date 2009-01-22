@@ -8,8 +8,9 @@ We maintain a read-only subversion mirror on the Google Code svn server: http://
 
 = Getting Started =
 Quick guide. Also check out [http://doc.bazaar-vcs.org/bzr.dev/en/mini-tutorial/index.html this 5-minute tutorial].
+ 1. Create a user on [https://launchpad.net Launchpad]
  1. Create a SSH keypair
-   * Launch the public key to Launchpad
+   * Upload the public key to Launchpad ("change details" in your profile page, look for a  "SSH Keys" submenu)
    * Load your private key with ssh-agent on `*`nix or [http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html Pageant] on Windows.
  1. Install Bazaar (from [https://launchpad.net/bzr/+download here] or your system's package management system)
  1. Run the following (I don't use my real email, you can decide for yourself):
