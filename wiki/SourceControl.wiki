@@ -56,16 +56,17 @@ bzr pull
 }}}
 
 = Contributing =
-If you're part of the Testoob team:
- * Push to a private branch: see the [https://help.launchpad.net/Code/UploadingABranch Launchpad docs]
- * Push to trunk:
-{{{
-bzr push lp:testoob
-}}}
 
 Bazaar makes it easy to contribute regardless of "commit access". Your name stays on the commits.
  * You can push to a [https://help.launchpad.net/Code/PersonalBranches personal branch] on Launchpad and let us know (we can pull the changes from there)
  * You can create a [http://bazaar-vcs.org/BzrGivingBack bundle] file and send it:
 {{{
 bzr bundle -o bundle.patch
+}}}
+
+If you're part of the Testoob team:
+ * Push to a private branch: see the [https://help.launchpad.net/Code/UploadingABranch Launchpad docs]
+ * Push to trunk:
+{{{
+bzr push lp:testoob
 }}}
