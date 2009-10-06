@@ -19,7 +19,7 @@ bzr whoami "John Doe <john@example.com>"
 }}}
  1. Create a shared repository (helps with cheap branching later):
 {{{
-bzr init-repo --1.9-rich-root testoob
+bzr init-repo --rich-root testoob
 }}}
  1. Get the trunk:
 {{{
