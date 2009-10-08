@@ -1,0 +1,60 @@
+Lets assume we're releasing version 6.2
+
+* Update docs/CHANGELOG
+
+    ./other/logistics/generate_release.py --for-keeps --update-changelog --root-dir=.
+
+  edit the changes and commit.
+
+* Create a SourceForge release
+  (Admin -> File Releases -> Add Release)
+  Or directly:
+  http://sourceforge.net/project/admin/newrelease.php?package_id=152827&group_id=138557
+
+  Call the release '6.2'
+
+  Add just the changelog for now
+
+* Update the website sources with the news
+
+* Generate the release (branches, creates distfile, uploads to sourceforge)
+
+    ./other/logistics/generate_release.py --for-keeps --release=6.2 --root-dir=.
+
+* Add the files to the SourceForge file release
+
+* Download the release, see that it works
+
+* Create a news announcement from the most recent changelog entry.
+  A Sourceforge-style announcement works well for most news channels.
+
+* Upload the website
+
+* Upload news announcement:
+  - Sourceforge (http://sourceforge.net/news/submit.php?group_id=138557)
+  - Freshmeat (http://freshmeat.net/projects/testoob)
+  - cheeseshop ('python setup.py register')
+    * FROM THE RELEASE BRANCH!!!
+    * change the 'long description' to a news release
+  - Vaults of Parnassus (http://py.vaults.ca/submit)
+  - The mailing lists (combine and edit the news announcement and the
+    changelog)
+
+* Upload files to the cheeseshop
+  - A distutils tarball
+  - Python 2.3 + 2.4 eggs, 'easy-install -zxN testoob-x.xx.tar.bz2'
+
+* Update the wiki pages
+  - Wikipedia
+  - The Python Wiki
+
+* Notify packagers
+  - Gentoo: Add a ticket on https://bugs.gentoo.org/ to package the release.
+      See bug #157098 for example.
+          Summary: dev-python/testoob-x.xx
+      Description: version bump
+               CC: Lukasz Strzygowski <lucass_gentoo_org>
+  - FreeBSD: port maintainer Tobias Roth <ports_fsck_ch> monitors Freshmeat, so
+      nothing special.
+
+* Celebrate
