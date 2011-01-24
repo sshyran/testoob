@@ -1,3 +1,3 @@
 #summary Working with Testoob's source control.
 
-The Testoob source code is hosted on !GitHub: http://github.com/orip/testoob
+The Testoob source code is hosted on !GitHub: https://github.com/testoob/testoob
